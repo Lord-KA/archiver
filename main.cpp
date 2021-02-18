@@ -11,7 +11,7 @@ void help()
 
 enum Algorithm { RLE, HUFFMAN};
 
-int main(int argc, char **argv)
+int main(int argc, char **argv) //TODO add timestamps saving; decoding health check (hashsum crc16/32); add man; add cmake (make install option); add multyfile archivation. 
 {
     Algorithm alg = RLE;
     std::vector<char*> InpFiles;
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     for (int i=1; i < argc; ++i)
     {
         std::string elem{argv[i]};
-        if (argv[i][0] == '-')
+        if (argv[i][0] == '-') //TODO file delete option; add multiotions (like "-nt")
         {   
             if (elem == "--help" || elem == "-h")
                 help();
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
                 alg = HUFFMAN;
         }
         else
-            InpFiles.push_back(argv[i]); //TODO add filename check
+            InpFiles.push_back(argv[i]); 
     }
     if (!InpFiles.size())
     {
