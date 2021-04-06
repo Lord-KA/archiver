@@ -7,7 +7,9 @@
 #include <sys/stat.h>
 
 #include "rle.hpp"
-
+#include "encoder.hpp"
+#include "Format.hpp"
+#include "huffman.hpp"
 
 void help()
 {
@@ -84,8 +86,12 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
         
     std::ofstream out(outpFileName, std::ofstream::out);
 
-
+    Format format;
+    format.Filename(outpFileName);
+    format.Comment("add other info"); //TODO add other info
     
+    format.WriteHeading(out);
+
     for (auto elem : inpFiles)
     {
         std::ifstream in(elem, std::ifstream::binary);
@@ -94,17 +100,20 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
             std::cerr << "ERROR: unable to open file " << elem << std::endl;
             return EXIT_FAILURE;
         }
+        Encoder *F;
         switch (alg){
             case RLE:{
-                Rle encoder(in, out);
+                F = new Rle(in, out); //TODO change the name
                 break; 
             }
 
             case HUFFMAN: {
                 std::cout << "No Huffman yet :(" << std::endl;
+                F = new Huffman(in, out);
                 break;
             }
         }
+        (*F).encode();
         in.close();
     }
 

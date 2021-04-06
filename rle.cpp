@@ -1,7 +1,5 @@
 #include "rle.hpp"
 
-Rle::Rle(std::ifstream &inp, std::ofstream &outp) : Encoder(inp, outp){};  
-
 bool Rle::encode()
 {
     char curVal = inp.get();
@@ -24,6 +22,13 @@ bool Rle::encode()
 
 bool Rle::decode()
 {
+    char val = inp.get();
     int cnt = inp.get();
-    int val = in.get();
+    while (!inp.eof())
+    {
+        for(int i=0; i<cnt; ++i)
+            outp.put(val);
+        val = inp.get(); cnt = inp.get();
+    }
+    return true;
 }

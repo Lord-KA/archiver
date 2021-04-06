@@ -9,14 +9,11 @@ class Encoder
         virtual bool encode() = 0;
         virtual bool decode() = 0;
 
-        Encoder(std::ifstream &inp, std::ofstream &outp);
-        virtual ~Encoder() = 0;
+        Encoder(std::istream &inp, std::ostream &outp) : inp(inp), outp(outp) {};
 
-    private:
-        std::ifstream &inp;
-        std::ofstream &outp;
+    protected:
+        std::istream &inp;
+        std::ostream &outp;
 };
-
-Encoder::~Encoder(){};
 
 #endif
