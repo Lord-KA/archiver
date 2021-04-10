@@ -1,34 +1,39 @@
 #include "rle.hpp"
+#include <iostream>
 
-bool Rle::encode()
+bool Rle::Encode()
 {
-    char curVal = inp.get();
-    char oldVal = curVal;
+    int curVal = inp.get();
+    int oldVal = curVal;
     int cnt = 0;
 
     while (!inp.eof()){
         if (curVal != oldVal || cnt == 255){
-            outp << cnt << static_cast<char>(oldVal);
+            std::cout << cnt << '\n';
+            outp.put(cnt);
+            outp.put(oldVal);
             cnt = 1;
             oldVal = curVal;
         }
+        else ++cnt;
 
-        else ++ cnt;
+        curVal = inp.get();
     }
-    if (cnt) outp << cnt << static_cast<char>(oldVal);
+    if (cnt) {outp.put(cnt); outp.put(oldVal);}
 
     return true;
 }
 
-bool Rle::decode()
+bool Rle::Decode()
 {
+    char cnt = inp.get();
     char val = inp.get();
-    int cnt = inp.get();
     while (!inp.eof())
     {
-        for(int i=0; i<cnt; ++i)
+        for(size_t i=0; i<static_cast<int>(cnt); ++i)
             outp.put(val);
-        val = inp.get(); cnt = inp.get();
+        cnt = inp.get();
+        val = inp.get();
     }
     return true;
 }

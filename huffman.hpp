@@ -6,8 +6,8 @@
 class Huffman: public Encoder
 {
     public:
-        bool encode();
-        bool decode();
+        bool Encode();
+        bool Decode();
         
         Huffman(std::istream &in, std::ostream &out) : Encoder(in, out) {};
 }; 

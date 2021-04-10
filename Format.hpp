@@ -67,6 +67,8 @@ class Format
     
     void WriteHeading( std::ostream & out );
     void WriteEnding( std::ostream & out );
+
+    void PrettyOutput();
 };
 
 #endif //Format_h

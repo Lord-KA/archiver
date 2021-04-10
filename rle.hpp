@@ -6,8 +6,8 @@
 class Rle: public Encoder
 {
     public:
-        bool encode();
-        bool decode();
+        bool Encode();
+        bool Decode();
         
         Rle(std::istream &in, std::ostream &out) : Encoder(in, out) {};
 }; 

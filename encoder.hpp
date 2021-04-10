@@ -2,14 +2,18 @@
 #define ENCODER_HPP
 
 #include <fstream>
+#include "Format.hpp"
+
 
 class Encoder
 {
     public:
-        virtual bool encode() = 0;
-        virtual bool decode() = 0;
+        virtual bool Encode() = 0;
+        virtual bool Decode() = 0;
 
         Encoder(std::istream &inp, std::ostream &outp) : inp(inp), outp(outp) {};
+
+        void WriteMetadata(Format format);
 
     protected:
         std::istream &inp;

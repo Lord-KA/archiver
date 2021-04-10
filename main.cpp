@@ -11,13 +11,34 @@
 #include "Format.hpp"
 #include "huffman.hpp"
 
+enum Algorithm { RLE, HUFFMAN};
+enum Mode {ARCHIVE, EXTRACT, LIST, TEST};
+
 void help()
 {
     std::cout << "this is an archiver" << std::endl;
 }
 
-enum Algorithm { RLE, HUFFMAN};
-enum Mode {ARCHIVE, EXTRACT, LIST, TEST};
+std::ifstream open(std::string fileName){
+    
+    std::ifstream in(fileName, std::ifstream::binary);
+    if (!in.is_open()){
+        std::cerr << "ERROR: unable to open file " << fileName << std::endl;
+        return EXIT_FAILURE;
+    }
+    return in;
+}
+
+Encoder* AlgChoice(Algorithm alg, std::ifstream &in, std::ofstream &out){
+    Encoder* encoder;
+    if (alg == RLE)
+        encoder = new Rle(in, out);
+    else if (alg == HUFFMAN)
+        encoder = new Huffman(in, out);
+    
+    return encoder;
+} 
+
 
 int main(int argc, char **argv) //TODO add timestamps saving; decoding health check (hashsum crc16/32); add man; add cmake (make install option); add multyfile archivation. 
 {
@@ -55,6 +76,12 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                 alg = RLE;
             else if (elem == "--huffman")
                 alg = HUFFMAN;
+            else if (elem == "--extract")
+                mode = EXTRACT;
+            else if (elem == "--list")
+                mode = LIST;
+            else if (elem == "--test")
+                mode = TEST;
             
             else
                 for (int j=1; j<elem.size(); ++j)
@@ -84,38 +111,63 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
         // check fileformat and make a name
     }
         
-    std::ofstream out(outpFileName, std::ofstream::out);
 
-    Format format;
-    format.Filename(outpFileName);
-    format.Comment("add other info"); //TODO add other info
-    
-    format.WriteHeading(out);
+    switch (mode){
+        case ARCHIVE:{
+            std::ofstream out(outpFileName, std::ofstream::out);
+            for (auto elem : inpFiles)
+            {
+                
+                Format format;
+                format.Filename(elem);
+                format.Comment("add other info"); //TODO add other info  
+                format.WriteHeading(out);
+                
+                std::ifstream in = open(elem);
 
-    for (auto elem : inpFiles)
-    {
-        std::ifstream in(elem, std::ifstream::binary);
-        if (!in.is_open())
-        {
-            std::cerr << "ERROR: unable to open file " << elem << std::endl;
-            return EXIT_FAILURE;
-        }
-        Encoder *F;
-        switch (alg){
-            case RLE:{
-                F = new Rle(in, out); //TODO change the name
-                break; 
+                (*AlgChoice(alg, in, out)).Encode();
+                
+                in.close();
+                format.WriteEnding(out);
             }
-
-            case HUFFMAN: {
-                std::cout << "No Huffman yet :(" << std::endl;
-                F = new Huffman(in, out);
-                break;
-            }
+            break;
         }
-        (*F).encode();
-        in.close();
+        case EXTRACT:{
+            Format format;
+            for (auto elem : inpFiles){
+                std::ifstream in = open(elem);
+                format.ReadHeading(in);
+                outpFileName = format.Filename();
+                std::cout << format.Comment() << '\n';
+                
+                while (!in.eof()){
+                    std::ofstream out(outpFileName, std::ofstream::out);
+                    
+                    Encoder *encoder = AlgChoice(alg, in, out);
+                    (*encoder).Decode();
+                    (*encoder).WriteMetadata(format);
+                    delete encoder; //TODO think about deleting derived class
+                    }
+            }
+            break;
+        }
+        case TEST:{
+            //TODO implement testing alg
+            break;
+        }
+        case LIST:{
+            Format format;
+            for (auto elem : inpFiles){
+                std::ifstream in = open(elem);
+                format.ReadHeading(in);
+                while (!in.eof()){
+                    format.PrettyOutput();
+                    //TODO Jump to the next file
+                    format.ReadHeading(in);
+                }
+            }
+            break;
+        }
     }
-
     return 0;
 }
