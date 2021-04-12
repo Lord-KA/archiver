@@ -3,11 +3,11 @@
 #include <fstream>
 #include "encoder.hpp"
 
-class Huffman: public Encoder
+class Huffman final: public Encoder
 {
     public:
-        bool Encode();
-        bool Decode();
+        bool Encode() override;
+        bool Decode() override;
         
         Huffman(std::istream &in, std::ostream &out) : Encoder(in, out) {};
 }; 

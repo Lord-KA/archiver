@@ -9,7 +9,6 @@ bool Rle::Encode()
 
     while (!inp.eof()){
         if (curVal != oldVal || cnt == 255){
-            std::cout << cnt << '\n';
             outp.put(cnt);
             outp.put(oldVal);
             cnt = 1;
@@ -26,14 +25,18 @@ bool Rle::Encode()
 
 bool Rle::Decode()
 {
-    char cnt = inp.get();
-    char val = inp.get();
+    union {char bytes[4]; uint32_t val;} pack;
+    pack.bytes[2] = inp.get();
+    pack.bytes[3] = inp.get();
     while (!inp.eof())
     {
-        for(size_t i=0; i<static_cast<int>(cnt); ++i)
-            outp.put(val);
-        cnt = inp.get();
-        val = inp.get();
+        pack.bytes[1] = pack.bytes[3]; pack.bytes[0] = pack.bytes[2];
+        for(size_t i=0; i<static_cast<int>(pack.bytes[2]); ++i)
+            outp.put(pack.bytes[3]);
+        pack.bytes[2] = inp.get();
+        pack.bytes[3] = inp.get();
+        if (pack.val == 0x00FFFF00)
+            return true;
     }
     return true;
 }

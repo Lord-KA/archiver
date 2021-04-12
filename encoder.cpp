@@ -1,5 +1,5 @@
 #include "encoder.hpp"
 
-void writeMetadata(Format format){ 
+void Encoder::WriteMetadata(Format format){ 
     //TODO implement format writing;
 }

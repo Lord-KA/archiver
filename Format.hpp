@@ -1,7 +1,9 @@
 #ifndef  Format_hpp
 #define  Format_hpp
 
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <iostream>
 #include <string>
 #include <istream>
 #include <ostream>
@@ -42,6 +44,7 @@ class Format
   
   public:
     Format();
+    Format(std::string fileName, std::string fileComment = "");
 
     void Timestamp( time_t timestamp );
     time_t Timestamp() const;

@@ -3,11 +3,11 @@
 #include <fstream>
 #include "encoder.hpp"
 
-class Rle: public Encoder
+class Rle final: public Encoder
 {
     public:
-        bool Encode();
-        bool Decode();
+        bool Encode() override;
+        bool Decode() override ;
         
         Rle(std::istream &in, std::ostream &out) : Encoder(in, out) {};
 }; 

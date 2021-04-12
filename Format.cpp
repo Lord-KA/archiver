@@ -1,12 +1,37 @@
 #include "Format.hpp"
 
 
+int EOFflag = 0x00FFFF00;
+
 Format::Format()
 : id1(0x1F), id2(0x20), cm(0), flg(0),
   mtime(0), xfl(0), os(0x03), xlen(0),
   fname(256,0), fcomm(256,0), crc32(0),
   crc64(0), isize(0)
 {}
+
+
+Format::Format(std::string fileName, std::string fileComment) //TODO add os check
+: id1(0x1F), id2(0x20), cm(0), flg(0),
+  mtime(0), xfl(0), os(0x03), xlen(0),
+  fname(256,0), fcomm(256,0), crc32(0),
+  crc64(0), isize(0)
+{
+    flg |= 0x08; // fname
+    if (!fileComment.empty())
+        flg |=  0x10;
+
+    struct stat result;
+    if (stat(fileName.c_str(), &result) == 0)
+    {
+        mtime = result.st_mtime;
+        isize = result.st_size;
+        std::cout << mtime << " " << isize;
+    }
+    else
+        throw std::runtime_error("Eror reading metadata with stat()");
+    
+}
 
 void Format::Timestamp( time_t timestamp )
 {
@@ -217,6 +242,9 @@ void Format::WriteHeading( std::ostream & out )
     
 void Format::WriteEnding( std::ostream & out )
 {
+  if( !out.write(reinterpret_cast<char*>(&EOFflag), 4))
+      throw runtime_error("Error writing eof flag");
+
   if( !out.write(reinterpret_cast<char*>(&crc64),8) )
     throw runtime_error("Error writing CRC64"); 
   
@@ -224,3 +252,7 @@ void Format::WriteEnding( std::ostream & out )
     throw runtime_error("Error writing ISIZE"); 
 }
 
+void Format::PrettyOutput()
+{
+    std::cout << "-------- " << Filename(); //TODO add pretty and informative metadata output
+}   

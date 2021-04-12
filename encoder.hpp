@@ -15,6 +15,7 @@ class Encoder
 
         void WriteMetadata(Format format);
 
+
     protected:
         std::istream &inp;
         std::ostream &outp;
