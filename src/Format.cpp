@@ -17,21 +17,25 @@ Format::Format()
 Format::Format(std::string fileName, std::string fileComment) //TODO add os check
 : id1(0x1F), id2(0x20), cm(0), flg(0),
   mtime(0), xfl(0), os(0x03), xlen(0),
-  fname(fileName), fcomm(fileComment), crc32(0),
+  fname(), fcomm(), crc32(0),
   crc64(0), isize(0)
 {
     fname.reserve(256);
     fcomm.reserve(256);
     flg |= 0x08; // fname
-    if (!fileComment.empty())
+    fname = fileName;
+    if (!fileComment.empty()){
         flg |=  0x10;
+        fcomm = fileComment;
+    }
+
 
     struct stat result;
     if (stat(fileName.c_str(), &result) == 0)
     {
         mtime = result.st_mtime;
-        isize = result.st_size;
-        std::cout << mtime << " " << isize;
+        // isize = result.st_size;
+        std::cout << mtime << " " << isize << '\n'; //DEBUG
     }
     else
         throw std::runtime_error("Eror reading metadata with stat()");
@@ -165,25 +169,15 @@ void Format::ReadHeading( std::istream & in )
   }
   if( flg & 0x08 ) // fname
   {
-    while(true)
-    {
-      char c = in.get();
-      if( in.eof() ) 
-        throw runtime_error("Error reading FNAME"); 
-      if( c == 0 ) break;
-      fname += c;
-    }
+    std::getline(in, fname, '\0');
+    if( in.eof() ) 
+       throw runtime_error("Error reading FNAME"); 
   }
   if( flg & 0x10 ) // fcomm
   {
-    while(true)
-    {
-      char c = in.get();
-      if( in.eof() ) 
-        throw runtime_error("Error reading FCOMM"); 
-      if( c == 0 ) break;
-      fcomm += c;
-    }
+    std::getline(in, fcomm, '\0');
+    if( in.eof() ) 
+       throw runtime_error("Error reading FCOMM"); 
   }
   if( flg & 0x02 ) // crc32
   {
