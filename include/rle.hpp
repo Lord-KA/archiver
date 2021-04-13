@@ -10,6 +10,7 @@ class Rle final: public Encoder
         bool Decode() override ;
         
         Rle(std::istream &in, std::ostream &out) : Encoder(in, out) {};
+        ~Rle() = default;
 }; 
 
 #endif

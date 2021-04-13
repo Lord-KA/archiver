@@ -1,4 +1,4 @@
-#include "rle.hpp"
+#include "../include/rle.hpp"
 #include <iostream>
 
 bool Rle::Encode()

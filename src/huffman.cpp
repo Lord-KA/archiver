@@ -1,4 +1,4 @@
-#include "huffman.hpp"
+#include "../include/huffman.hpp"
 
 bool Huffman::Encode(){
     //TODO write huffman encoding

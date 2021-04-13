@@ -12,6 +12,7 @@ class Encoder
         virtual bool Decode() = 0;
 
         Encoder(std::istream &inp, std::ostream &outp) : inp(inp), outp(outp) {};
+        virtual ~Encoder() = default;
 
         void WriteMetadata(Format format);
 

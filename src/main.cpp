@@ -6,10 +6,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "rle.hpp"
-#include "encoder.hpp"
-#include "Format.hpp"
-#include "huffman.hpp"
+#include "../include/rle.hpp"
+#include "../include/encoder.hpp"
+#include "../include/Format.hpp"
+#include "../include/huffman.hpp"
 
 enum class Algorithm { RLE, HUFFMAN};
 enum class Mode {ARCHIVE, EXTRACT, LIST, TEST};
@@ -84,7 +84,7 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                 mode = Mode::TEST;
             
             else
-                for (int j=1; j<elem.size(); ++j)
+                for (int j=1; j < elem.size(); ++j)
                 {
                     if (elem[j] == 'e')
                         mode = Mode::EXTRACT;
@@ -152,7 +152,6 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                 openInpFile(elem, in);
                 format.ReadHeading(in);
                 outpFileName = format.Filename();
-                std::cout << outpFileName << '\n'; //DEBUG
                 while (!in.eof()){
                     std::ofstream out(outpFileName, std::ofstream::out);
                     

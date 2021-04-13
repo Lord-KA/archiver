@@ -1,4 +1,4 @@
-#include "Format.hpp"
+#include "../include/Format.hpp"
 
 
 int EOFflag = 0x00FFFF00;
@@ -6,17 +6,22 @@ int EOFflag = 0x00FFFF00;
 Format::Format()
 : id1(0x1F), id2(0x20), cm(0), flg(0),
   mtime(0), xfl(0), os(0x03), xlen(0),
-  fname(256,0), fcomm(256,0), crc32(0),
+  fname(), fcomm(), crc32(0),
   crc64(0), isize(0)
-{}
+{
+    fname.reserve(256);
+    fcomm.reserve(256);
+}
 
 
 Format::Format(std::string fileName, std::string fileComment) //TODO add os check
 : id1(0x1F), id2(0x20), cm(0), flg(0),
   mtime(0), xfl(0), os(0x03), xlen(0),
-  fname(256,0), fcomm(256,0), crc32(0),
+  fname(fileName), fcomm(fileComment), crc32(0),
   crc64(0), isize(0)
 {
+    fname.reserve(256);
+    fcomm.reserve(256);
     flg |= 0x08; // fname
     if (!fileComment.empty())
         flg |=  0x10;
