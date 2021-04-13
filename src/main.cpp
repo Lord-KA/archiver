@@ -136,9 +136,10 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                 
                 std::ifstream in;
                 openInpFile(elem, in);
-
-                (*AlgChoice(alg, in, out)).Encode();
+                Encoder *encoder = AlgChoice(alg, in, out);
+                encoder->Encode();
                 
+                delete encoder;
                 in.close();
                 format.WriteEnding(out);
             }
@@ -162,7 +163,7 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                     format.ReadEnding(in);
                     delete encoder;
                     out.close();
-                    break; //DEBUG
+                    //break; //DEBUG
                     format.ReadHeading(in);
                     outpFileName = format.Filename();
                 }
