@@ -163,11 +163,10 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
                     format.ReadEnding(in);
                     delete encoder;
                     out.close();
-                    //break; //DEBUG
                     try{
                         format.ReadHeading(in);
                     }
-                    catch(std::runtime_error){
+                    catch(const std::runtime_error &){
                         break;
                     }
                     outpFileName = format.Filename();
