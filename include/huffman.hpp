@@ -3,6 +3,7 @@
 #include <fstream>
 #include "encoder.hpp"
 
+//зачем final?
 class Huffman final: public Encoder
 {
     public:

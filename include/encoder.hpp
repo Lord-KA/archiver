@@ -2,6 +2,7 @@
 #define ENCODER_HPP
 
 #include <fstream>
+//почему не "class Format;"?
 #include "Format.hpp"
 
 

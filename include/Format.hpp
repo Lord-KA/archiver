@@ -1,8 +1,10 @@
 #ifndef  Format_hpp
 #define  Format_hpp
 
+//на винде их нет)
 #include <sys/types.h>
 #include <sys/stat.h>
+//
 #include <iostream>
 #include <string>
 #include <istream>

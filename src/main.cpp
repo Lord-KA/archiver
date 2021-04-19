@@ -3,9 +3,11 @@
 #include <vector>
 #include <fstream>
 
+//и опять они платформозависимые...
 #include <sys/types.h>
 #include <sys/stat.h>
 
+//и опять пути плохие...
 #include "../include/rle.hpp"
 #include "../include/encoder.hpp"
 #include "../include/Format.hpp"
@@ -21,6 +23,7 @@ void help()
 
 std::ifstream& openInpFile(std::string fileName, std::ifstream &in){
     
+    //а если in уже открыт?
     in.open(fileName, std::ifstream::binary);
     if (!in.is_open()){
         std::cerr << "ERROR: unable to open file " << fileName << std::endl;
@@ -44,7 +47,7 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
 {
     Algorithm alg = Algorithm::RLE;
     Mode mode = Mode::ARCHIVE;
-    std::vector<char*> inpFiles;
+    std::vector<char*> inpFiles; //зачем, они же все в argv?
     bool customOutpName = false;
     std::string outpFileName = "file";
 
@@ -53,7 +56,7 @@ int main(int argc, char **argv) //TODO add timestamps saving; decoding health ch
         std::string elem{argv[i]};
         if (elem[0] == '-') //TODO file delete option; check for repeating inpFiles
         {   
-            if (elem == "--help" || elem == "-h")
+            if (elem == "--help" || elem == "-h") // ./a.out -hv - ?
                 help();
 
             else if (elem == "-o"){

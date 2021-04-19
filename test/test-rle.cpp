@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+//путь...
 #include "rle.hpp"
 
 int main(int argc, char **argv)

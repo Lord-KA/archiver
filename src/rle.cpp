@@ -1,3 +1,4 @@
+//так себе путь, при использованиии системы сборки...
 #include "../include/rle.hpp"
 #include <iostream>
 
@@ -35,7 +36,7 @@ bool Rle::Decode()
             outp.put(pack.bytes[3]);
         pack.bytes[2] = inp.get();
         pack.bytes[3] = inp.get();
-        if (pack.val == 0x00FFFF00)
+        if (pack.val == 0x00FFFF00) //а если конец сразу, тогда что?
             return true;
     }
     return true;

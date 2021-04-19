@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.18.1)
 project(Archiver)
 
 set(CMAKE_CXX_COMPILER_DEBUG g++)

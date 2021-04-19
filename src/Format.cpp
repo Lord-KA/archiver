@@ -23,7 +23,7 @@ Format::Format(std::string fileName, std::string fileComment) //TODO add os chec
     fname.reserve(256);
     fcomm.reserve(256);
     flg |= 0x08; // fname
-    fname = fileName;
+    fname = fileName; //зачем тогда reserve?
     if (!fileComment.empty()){
         flg |=  0x10;
         fcomm = fileComment;
