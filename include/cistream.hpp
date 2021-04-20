@@ -7,7 +7,7 @@
 // #include "cipher.hpp" //TODO create cipher virtual class and derived classes like aes128
 
 
-static const int buffer_size = 128;
+static const size_t buffer_size = 128;
 
 template<typename T>
 class cistream: public T
@@ -24,7 +24,7 @@ class cistream: public T
         T& getline (char* s, std::streamsize n, char delim = '\n') override;
     private:
         char buf[buffer_size];
-        int occupancy;
+        size_t occupancy;
 };
 
 

@@ -2,7 +2,7 @@
 
 template<typename T>
 T& cistream<T>::get(char* s, std::streamsize n){ // is n needed?
-    s = buf[buffer_size - occupancy];
+    s = buf[buffer_size - occupancy]; //?
     if (occupancy == 0){
         occupancy = buffer_size;
         T::read(buf, buffer_size); 

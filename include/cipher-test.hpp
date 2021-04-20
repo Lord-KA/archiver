@@ -7,7 +7,7 @@
 class cipherTest : public cipher
 {
     private:
-        static const int block_size = 128;
+        static const size_t block_size = 128;
     public:
         void encrypt(char *s) override;
         void decrypt(char *s) override;
